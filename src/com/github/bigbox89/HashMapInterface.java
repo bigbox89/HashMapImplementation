@@ -1,26 +1,11 @@
 package com.github.bigbox89;
 
-public interface HashMapInterface {
+public interface HashMapInterface<K, V> extends Iterable<Entry<K, V>> {
 
-    static int count = 0;
-    int sizeCount = 0;
-    int Size = 0;
+    V get(K key);
 
-    /* хэш-функция */
-    int hash(int h);
+    void put(K key, V value);
 
-    // возвращает номер по значению хэш-функции/
-    int numIndex(int h);
+    int size();
 
-    // Добавляет пару в множество
-    public void put(int key, double value);
-
-    // Проверяет наличие пары с ключем key
-    public boolean isContainsKey(int key);
-
-    //Возвращает значение
-    public double get(int key);
-
-    //Возвращает размер
-    public int size();
 }

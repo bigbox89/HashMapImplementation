@@ -1,33 +1,61 @@
 package com.github.bigbox89;
 
-public class HashMapImplementation implements HashMapInterface{
-    @Override
-    public int hash(int h) {
-        return 0;
+import java.util.Iterator;
+
+public class HashMapImplementation<K, V> implements HashMapInterface<K, V> {
+
+    private Entry<K, V>[] hashMap;
+    private int size;
+    private float threshold;
+
+    public HashMapImplementation() {
+        hashMap = new Entry[16];
+        threshold = hashMap.length * 0.75f;
     }
 
     @Override
-    public int numIndex(int h) {
-        return 0;
+    public V get(K key) {
+        for (Entry<K, V> entry : hashMap) {
+            if (entry != null && entry.getKey().equals(key)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     @Override
-    public void put(int key, double value) {
-
+    public void put(K key, V value) {
+        if (size + 1 >= threshold) {
+            threshold *= 2;
+            arrayIncreasingTwice();
+        }
+        if (get(key) == null) {
+            size++;
+        }
+        int hash = key.hashCode();
+        int index = (hash & 0x7FFFFFFF) % hashMap.length;
+        hashMap[index] = new Entry<>(key, value);
     }
 
-    @Override
-    public boolean isContainsKey(int key) {
-        return false;
-    }
-
-    @Override
-    public double get(int key) {
-        return 0;
+    void arrayIncreasingTwice() {
+        Entry<K, V>[] oldHashTable = hashMap;
+        hashMap = new Entry[oldHashTable.length * 2];
+        size = 0;
+        for (Entry<K, V> entry : oldHashTable) {
+            if (entry != null) {
+                put(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
+
+    @Override
+    public Iterator iterator() {
+        return new EntryIterator(hashMap);
+    }
+
 }
