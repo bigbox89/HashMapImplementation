@@ -3,9 +3,12 @@ package com.github.bigbox89;
 import java.util.Iterator;
 
 public class HashMapImplementation<K, V> implements HashMapInterface<K, V> {
-
+    //Hash Map element
     private Entry<K, V>[] hashMap;
+    //Hash map size
     private int size;
+
+    //hash map capacity
     private float threshold;
 
     public HashMapImplementation() {
@@ -35,6 +38,22 @@ public class HashMapImplementation<K, V> implements HashMapInterface<K, V> {
         int hash = key.hashCode();
         int index = (hash & 0x7FFFFFFF) % hashMap.length;
         hashMap[index] = new Entry<>(key, value);
+    }
+    @Override
+    public void remove(K key){
+        Iterator iterator = iterator();
+        V objectForRemove = get(key);
+        if (objectForRemove != null) {
+            while(iterator.hasNext()){
+                Entry temp = (Entry) iterator.next();
+                if (temp.getValue().equals(objectForRemove))
+                {
+                    iterator.remove();
+                    size--;
+                }
+            }
+        }
+
     }
 
     void arrayIncreasingTwice() {
